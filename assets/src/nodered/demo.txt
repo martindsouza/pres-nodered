@@ -1,0 +1,26 @@
+*** REMIND PEOPLE ***
+
+THINK DIFFERENT!
+
+*** Initial ***
+
+Hello World
+
+
+TODO: - Show Problem / Solution
+
+- Install Oracle to get some interesting info
+
+- Get Data
+  - Get CSV Data
+  - Get CSV data via a given parameter
+
+- Connect to real world REST service to parse some info
+  - Parse data (make all lower case and only filter out what we want or manipulate it)
+  - Custom functio?
+
+- Email
+
+
+- Unzip file
+
