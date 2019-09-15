@@ -4,7 +4,34 @@ THINK DIFFERENT!
 
 *** Initial ***
 
-Hello World
+Problem: Introduction to NodeRed
+
+Solution: 
+
+```bash
+ssh opc@ocidockerdev.talkapex.com
+
+docker run -it -d \
+  -p 1880:1880 \
+  -v node-red:/data \
+  --name nodered \
+  --network=oracle_network \
+  martindsouza/node-red-oracle
+```
+
+# Talk about port forwarding with Tunnel
+http://localhost:9980
+
+
+
+- Show Nodes on left
+- Show basic Timer > Debug > Output
+  - Good for testing
+
+
+
+Problem:
+
 
 
 TODO: - Show Problem / Solution
