@@ -328,6 +328,8 @@ Using same data as before want to only get date and lower currency code.
 - Node: http request
   - GET: `https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv
 - Node: CSV
+  - Columns: `date,iso_a3,currency_code,name,local_price,dollar_ex,dollar_price,GDP_dollar,adj_price,USD,EUR,GBP,JPY,CNY`
+  - First row contains header: `check`
 - Node: Function
   
 ```javascript
@@ -341,6 +343,11 @@ msg.payload = tmp;
 return msg;
 ```
 
+
+**Step 2: ** 
+
+- Node: Timer (after Timestamp)
+  - `Resend every 10 s`
 
 
 # Problem:
