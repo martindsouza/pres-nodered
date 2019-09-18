@@ -1,6 +1,3 @@
-
-
-
 # Remind People
 
 **THINK DIFFERENT!**
@@ -77,7 +74,7 @@ Want to create a quick web service to say "hello world"
 - http://localhost:9980/hello/martin
 
 
-**Note: We'll come back to more of this terminology soon**
+** Note: We'll come back to more of this terminology soon **
 
 
 # Problem: Generate CSV of a query
@@ -128,6 +125,8 @@ Demo
 # Problem: Track file changes
 
 This can happen when people to bulk dumps of files on a file system
+
+https://github.com/TheEconomist/big-mac-data/tree/master/output-data
 
 ```sql
 
@@ -346,6 +345,15 @@ return msg;
 
 Want to read emails
 
+
+```sql
+
+truncate table email;
+
+select *
+from email;
+
+```
 
 ## Solution
 
