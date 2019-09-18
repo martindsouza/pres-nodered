@@ -481,5 +481,10 @@ Should look like: demo-export.json
 
 
 
+# Problem: Other
+
+- Show how to add pallete
+- Show other Nodes
+
 
 
