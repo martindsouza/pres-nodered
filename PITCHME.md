@@ -12,17 +12,6 @@ Martin Giffy D'Souza
 Note:
 
 
----?color=black
-
-@fa[cookie-bite fa-6x]
-
-TODO: Could use two background images instead. May be better
-
-
-Note:
-- TODO see Trello about story of trip to Florida
-
-
 ---?image=assets/img/soccer-net.jpg&size=cover&opacity=50
 
 @snap[north]
