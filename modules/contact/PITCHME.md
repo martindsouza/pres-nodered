@@ -16,7 +16,7 @@
 
 
 @snap[south]
-[bit.ly/oow19-release](http://bit.ly/oow19-release)
+[bit.ly/oow-nodered](http://bit.ly/oow-nodered)
 @snapend
 
 

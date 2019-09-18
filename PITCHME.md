@@ -5,7 +5,8 @@
 
 @snap[south span-40 text-08]
 Martin Giffy D'Souza
-http://TODOURL.com
+[bit.ly/oow-nodered](http://bit.ly/oow-nodered)
+[@fab[github] Code](https://github.com/martindsouza/pres-nodered)
 @snapend
 
 Note:
@@ -69,16 +70,13 @@ Note:
 
 
 @snap[north]
-## `<me/other>`
+## `<me/nodejs>`
 @snapend
 
-TODO think about simplifying this list below
 
 @ul[](false)
-
-- Working with Node.JS for a while
-- Seen the cost to experiment and business users can do dev
-
+- Use Node.js where PL/SQL difficult
+  - Ex: Web Scraper
 @ulend
 
 @snap[south]
@@ -96,6 +94,27 @@ Note:
 
 ---?include=modules/nodered/PITCHME.md
 
+---?color=black
 
----?include=modulues/contact/PITCHME.md
+# Wrapup
+
+--- 
+
+@snap[north span-100]
+## Thoughts
+@snapend
+
+
+@snap[midpoint span-100]
+- "Professional" version: [SnapLogic](https://www.snaplogic.com/)
+- Prototype at minimum
+- Test Node-RED before production
+- Use / Write own plugins
+@snapend
+
+Note:
+
+---?include=modules/contact/PITCHME.md
+
+
 

@@ -16,7 +16,7 @@ Note:
 @snapend
 
 
-@snap[midpoint]
+@snap[midpoint span-100]
 
 
 @ul[no-list-style](false)
@@ -61,7 +61,7 @@ docker run -it -d \
 @[5,zoom-15](Optional: Reference Docker network)
 @[6,zoom-15](Custom Docker image: includes Oracle drivers)
 
-@css[text-italic text-04]([Custom Docker image](https://github.com/martindsouza/docker-node-red-oracle))
+@css[text-italic text-04]([martindsouza/node-red-oracle](https://github.com/martindsouza/docker-node-red-oracle))
 @snapend
 
 

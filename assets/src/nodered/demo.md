@@ -159,6 +159,7 @@ cp /tmp/bmi.csv .
 
 - Node: Timestamp
 - Node: Read file: `/data/oowdemo/bmi.csv`
+- Node: Debug
 
 **Step 2: ** Convert to CSV and insert into DB
 
@@ -205,6 +206,8 @@ values(
 )
 ```
 
+- `truncate table big_mac_index;`
+
 ** Step 3: ** Solve 500 Solution
 
 - Node CSV: Change to one array message
@@ -215,8 +218,8 @@ values(
     - `msg.payload.data`
 - Node: Oracle
   - Field Mappings: `[ "data" ]`
-
-
+  - SQL: 
+  
 ```sql
 insert into big_mac_index(
   bmi_date,
@@ -270,7 +273,7 @@ from json_table(:valueOfValuesArrayIndex0, '$[*]'
 ```
 
 
-TODO show 
+- `truncate table big_mac_index;`
 
 
 ** Step 4: ** Drop file
@@ -286,7 +289,6 @@ rm -rf /data/oowdemo/bmi.csv
   - Filename: `<blank>`
 - Disconnect Oracle and debug JSON to test:
 
-
 ```bash
 # sudo -i 
 
@@ -294,7 +296,7 @@ cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo
 ```
 
 
-- Truncate Table
+- `truncate table big_mac_index;`
 - Reconnect Oracle
 `cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo`
 
@@ -308,7 +310,7 @@ cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo
   - GET: `https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv`
   - Attach to CSV
 
-- Truncate Table
+- `truncate table big_mac_index;`
 
 
 

@@ -6,10 +6,10 @@
 
 
 
----?color=linear-gradient(90deg, white 50%, black 50%)
+---?color=linear-gradient(90deg, white 50%, #8F0000 50%)
 
 @snap[north]
-## @css[text-black](Prob)@css[text-white](lem)
+## @css[text-brand-nodered](Prob)@css[text-white](lem)
 @snapend
 
 @snap[west text-center span-50]
@@ -17,8 +17,8 @@
 
 @ul[](false)
 - Want solutions
-- Change requirements
 - Fast pace
+- Change requirements
 @ulend
 @snapend
 
