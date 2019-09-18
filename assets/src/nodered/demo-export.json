@@ -1,0 +1,126 @@
+[
+  {
+      "id": "e0fe348e.10bca",
+      "type": "tab",
+      "label": "Flow 2",
+      "disabled": false,
+      "info": ""
+  },
+  {
+      "id": "18881df3.828ae2",
+      "type": "e-mail in",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "protocol": "IMAP",
+      "server": "imap.gmail.com",
+      "useSSL": true,
+      "port": "993",
+      "box": "INBOX",
+      "disposition": "Read",
+      "criteria": "UNSEEN",
+      "repeat": "5",
+      "fetch": "auto",
+      "inputs": 0,
+      "x": 150,
+      "y": 140,
+      "wires": [
+          [
+              "e989404e.3a30f8"
+          ]
+      ]
+  },
+  {
+      "id": "116d2a8f.3c59e5",
+      "type": "debug",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "x": 630,
+      "y": 160,
+      "wires": []
+  },
+  {
+      "id": "e989404e.3a30f8",
+      "type": "function",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "func": "let tmp = {};\n\ntmp.msg = msg.payload;\ntmp.subject = msg.topic;\ntmp.from = msg.header.from.value[0].address;\n\nmsg.payload = tmp;\n\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 230,
+      "y": 260,
+      "wires": [
+          [
+              "192c63ba.be634c"
+          ]
+      ]
+  },
+  {
+      "id": "528f8c6.6767d74",
+      "type": "oracledb",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "usequery": false,
+      "query": "insert into email (\n  msg, \n  subject, \n  from_address\n)\nvalues (\n  :valueOfValuesArrayIndex0, \n  :valueOfValuesArrayIndex1, \n  :valueOfValuesArrayIndex2\n)",
+      "usemappings": false,
+      "mappings": "[\"msg\",\"subject\",\"from\"]",
+      "server": "7a8cd783.f6541",
+      "resultaction": "none",
+      "resultlimit": 100,
+      "x": 640,
+      "y": 360,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "192c63ba.be634c",
+      "type": "json",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "property": "payload.msg",
+      "action": "",
+      "pretty": false,
+      "x": 340,
+      "y": 360,
+      "wires": [
+          [
+              "8b72c55a.6c2a68"
+          ]
+      ]
+  },
+  {
+      "id": "8b72c55a.6c2a68",
+      "type": "template",
+      "z": "e0fe348e.10bca",
+      "name": "",
+      "field": "payload",
+      "fieldType": "msg",
+      "format": "handlebars",
+      "syntax": "mustache",
+      "template": "Hello {{payload.msg.name}}.\n\nYou sent this from {{payload.msg.email}}",
+      "output": "str",
+      "x": 480,
+      "y": 280,
+      "wires": [
+          [
+              "116d2a8f.3c59e5"
+          ]
+      ]
+  },
+  {
+      "id": "7a8cd783.f6541",
+      "type": "oracle-server",
+      "z": "",
+      "host": "oracle-xe",
+      "port": "1521",
+      "reconnect": true,
+      "reconnecttimeout": "5000",
+      "db": "xepdb1"
+  }
+]

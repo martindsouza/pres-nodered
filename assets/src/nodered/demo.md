@@ -1,3 +1,6 @@
+
+
+
 # Remind People
 
 **THINK DIFFERENT!**
@@ -26,7 +29,7 @@ docker run -it -d \
 sudo -i
 
 cd /var/lib/docker/volumes/node-red/_data/
-yes | cp -rf flows.json flows.bkp
+yes | cp -rf /var/lib/docker/volumes/node-red/_data/flows.json /var/lib/docker/volumes/node-red/_data/flows.bkp
 
 ```
 
@@ -74,8 +77,52 @@ Want to create a quick web service to say "hello world"
 - http://localhost:9980/hello/martin
 
 
-
 **Note: We'll come back to more of this terminology soon**
+
+
+# Problem: Generate CSV of a query
+
+Want to generate a CSV file of a query via a URL
+
+_Note: Can do in ORDS as well, but think about who's doing it._
+
+## Solution:
+
+
+** Step 1: ** Setup the query
+
+- Node: Timestamp
+- Node: Oracle
+  - Query: `select * from emp`
+  - Field Mappinhs: `null`
+  - Results: `Single result message`
+- Node: Debug
+
+
+Demo
+
+
+** Step 2: ** Add CSV
+
+- Node: CSV
+  - Columns: `EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO`
+  - Output: `Include Column Name Row`
+
+
+Demo
+
+
+** Step 3: ** Add HTTP
+
+- Node: http
+  - Prefix at start
+  - URL: `/demo-csv`
+- Node: HTTP Response
+  - Suffix at end
+  - Headers
+    - `Content Type`: `text/csv`
+    - `content-disposition` : `attachment; filename="emp.csv"`
+- Demo: http://localhost:9980/demo-csv
 
 
 # Problem: Track file changes
@@ -100,6 +147,7 @@ cd /var/lib/docker/volumes/node-red/_data/oowdemo
 
 # Note: this maps to: /data/oowdemo in container
 
+# Src: https://github.com/TheEconomist/big-mac-data/tree/master/output-data
 cd /tmp
 wget -O bmi.csv https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv
 
@@ -253,25 +301,168 @@ cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo
 
 
 
+**Step 5: HTTP Request **
+
+- Node: Watch - Disconnect
+- Node: Http Request
+  - Attach to Timeer
+  - GET: `https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv`
+  - Attach to CSV
+
+- Truncate Table
 
 
 
 
 
+# Problem: Customize Functions
+
+Want to add a bit of programming to massage the data.
+
+Using same data as before want to only get date and lower currency code.
+
+## Solution
+
+- Node: Timer
+- Node: http request
+  - GET: `https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv
+- Node: CSV
+- Node: Function
+  
+```javascript
+let tmp = {};
+
+tmp.date = msg.payload.date
+tmp.curcode = msg.payload.currency_code.toLowerCase();
+
+msg.payload = tmp;
+
+return msg;
+```
 
 
-- Install Oracle to get some interesting info
 
-- Get Data
-  - Get CSV Data
-  - Get CSV data via a given parameter
+# Problem:
 
-- Connect to real world REST service to parse some info
-  - Parse data (make all lower case and only filter out what we want or manipulate it)
-  - Custom functio?
-
-- Email
+Want to read emails
 
 
-- Unzip file
+## Solution
+
+
+** Step 1: ** 
+
+- Node: Email
+  - Getmail Every: `5`
+  - Userid: `03j.dsouza@gmail.com`
+  - pass: ENPASS
+- Node: Debug
+  - All Message object
+
+
+** Step 2: ** Parse message
+
+- Node: Function
+
+```js
+let tmp = {};
+
+tmp.msg = msg.payload;
+tmp.subject = msg.topic;
+tmp.from = msg.header.from.value[0].address;
+
+msg.payload = tmp;
+
+return msg;
+
+```
+
+- Node: Debug
+  - Just set to `msg.payload`
+
+
+
+** Step 3: ** Insert to table
+
+- Node Oracle
+  - Field Mappings: ["msg","subject","from"]
+  - Results: Ignore
+  - Query: 
+
+```sql
+insert into email (
+  msg, 
+  subject, 
+  from_address
+)
+values (
+  :valueOfValuesArrayIndex0, 
+  :valueOfValuesArrayIndex1, 
+  :valueOfValuesArrayIndex2
+)
+```
+
+
+
+** Step 4: ** JSON Processing
+
+_Suppose the email was a JSON data and you wanted to process it_
+
+
+- Node: Oracle: Disconnect
+- Node: JSON
+  - `payload.msg`
+  - Connect to Debug (should be 2 debugs now)
+
+Demo: 
+
+```json
+{
+  "name" : "martin",
+  "email" : "mdsouza@insum.ca"
+}
+```
+  - Show the String vs JSON data
+
+Next:
+
+- Node: Template
+  
+```
+Hello {{payload.msg.name}}.
+
+You sent this from {{payload.msg.email}}
+```
+
+- Node Debug
+  - Only connect template
+  - Set to `msg.payload`
+
+
+Demo: Send same email
+
+
+
+# Problem: import / export
+
+How do I "share" or save these individuall?
+
+## Solution:
+
+Simple JSON architecture
+
+- Menu > Export > Clipboard 
+  - Chose Formatted
+
+Should look like: demo-export.json
+
+
+** Step 2: ** Import:
+
+- Menu > Import > Clipboard (could be a file)
+- 
+
+
+
+
 
