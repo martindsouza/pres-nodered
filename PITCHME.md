@@ -6,7 +6,7 @@
 @snap[south span-40 text-08]
 Martin Giffy D'Souza
 [bit.ly/oow-nodered](http://bit.ly/oow-nodered)
-@css[text-05]([@fab[github] Code](https://github.com/martindsouza/pres-nodered))
+[@fab[github] Code](https://github.com/martindsouza/pres-nodered)
 @snapend
 
 Note:
