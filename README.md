@@ -1,7 +1,8 @@
 # Node-RED and Oracle
 
- https://gitpitch.com/martindsouza/pres-nodered/master
+Slides: https://gitpitch.com/martindsouza/pres-nodered/master
 
+[Demos](assets/src/nodered) 
 
 ## Gitpitch
 

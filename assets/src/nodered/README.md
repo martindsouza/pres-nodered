@@ -1,17 +1,38 @@
-# Remind People
-
-**THINK DIFFERENT!**
+# Node-RED Demo
 
 
-# Problem: Introduction to NodeRed
+While going over the demo try to remember the goal: **Think Different!**
 
-## Solution: 
+Are a Problem / Solution model
+
+- [Prep:](#prep)
+- [Demo 0 Node-RED Setup](#demo-0-node-red-setup)
+  - [Add Oracle Node](#add-oracle-node)
+  - [Configure Oracle Node](#configure-oracle-node)
+- [Demo 1: Start / Debug](#demo-1-start--debug)
+- [Demo 2: Create a RESTful Service](#demo-2-create-a-restful-service)
+- [Demo 3: Generate CSV from query](#demo-3-generate-csv-from-query)
+- [Demo 4: Track file changes](#demo-4-track-file-changes)
+- [Demo 5: Custom Functions](#demo-5-custom-functions)
+- [Demo 6: Monitor / read emails](#demo-6-monitor--read-emails)
+- [Demo 7: Import / Export](#demo-7-import--export)
+
+
+## Prep:
+
+See [demo-prep.md](demp-prep.md)
+
+## Demo 0 Node-RED Setup
+
+Introduction to NodeRed
+
 
 ```bash
 ssh opc@ocidockerdev.talkapex.com
 
+# Note: See slides for launching Node-RED. This is a common Docker run command
 docker run -it -d \
-  -p 1880:1880 \
+  -p 9980:1880 \
   -v node-red:/data \
   --name nodered \
   --network=oracle_network \
@@ -20,35 +41,44 @@ docker run -it -d \
 # Talk about port forwarding with Tunnel
 ```
 
-## Backup of flows:
+Go to: http://localhost:9980
 
-```bash
-sudo -i
+### Add Oracle Node
 
-cd /var/lib/docker/volumes/node-red/_data/
-yes | cp -rf /var/lib/docker/volumes/node-red/_data/flows.json /var/lib/docker/volumes/node-red/_data/flows.bkp
+- Menu (_Top right corner_)
+- Manage palette
+- Install
+  - Search for `Oracle`
+  - Chose `node-red-contrib-oracledb-mod`
 
-```
+![](../../img/demo0-1.png)
 
 
-# Oracle Setup 
+### Configure Oracle Node
+
+![](../../img/demo0-2.png)
+![](../../img/demo0-3.png)
+
+Note: If using the Docker container The networking configuration will be relative to your container's instance which may be different than your laptops network.
+
 
 Server: `oracle-xe`
 Database: `oracle-xe`
 Port: `1521`
 
-- Go to: http://localhost:9980
-- Show Nodes on left
-- Show basic Timer > Debug > Output
-  - Good for testing
 
+## Demo 1: Start / Debug
 
+- Node: Inject
+- Node: debug
 
-# Problem: Create Web Service
+![](../../img/demo1.png)
 
-Want to create a quick web service to say "hello world"
+[demo1.json](demo1.json)
 
-## Solution:
+## Demo 2: Create a RESTful Service
+
+Want to create a quick RESTful web service to say "hello world"
 
 - Node: http
   - GET: `/hello`
@@ -58,7 +88,7 @@ Want to create a quick web service to say "hello world"
 - http://localhost:9980/hello
 
 
-### Advanced: Pass in my name
+Advanced: Pass in a URL parameter
 
 - Node: http
   - Get: `/hello/:name`
@@ -76,14 +106,16 @@ Want to create a quick web service to say "hello world"
 
 ** Note: We'll come back to more of this terminology soon **
 
+![](../../img/demo2.png)
 
-# Problem: Generate CSV of a query
+[demo2.json](demo2.json)
+
+
+## Demo 3: Generate CSV from query
 
 Want to generate a CSV file of a query via a URL
 
 _Note: Can do in ORDS as well, but think about who's doing it._
-
-## Solution:
 
 
 ** Step 1: ** Setup the query
@@ -122,14 +154,19 @@ Demo
 - Demo: http://localhost:9980/demo-csv
 
 
-# Problem: Track file changes
+![](../../img/demo3.png)
+
+[demo3.json](demo3.json)
+
+
+## Demo 4: Track file changes
 
 This can happen when people to bulk dumps of files on a file system
 
-https://github.com/TheEconomist/big-mac-data/tree/master/output-data
+Source: https://github.com/TheEconomist/big-mac-data/tree/master/output-data
 
+Queries to track changes in the databse:
 ```sql
-
 truncate table big_mac_index;
 
 select count(1)
@@ -137,25 +174,26 @@ from big_mac_index;
 ```
 
 
-## Solution:
-
 ```bash
+# Login to laptop
+# In my Oracle Cloud setup I need to be root to access /var/lib....
 sudo -i
-cd /var/lib/docker/volumes/node-red/_data/oowdemo
-# mkdir oowdemo
 
-# Note: this maps to: /data/oowdemo in container
+# On laptop "/var/lib/docker/volumes/node-red/_data" maps to "/data" on Docker container
+cd /var/lib/docker/volumes/node-red/_data
+mkdir oowdemo
 
+# Download CSV file
 # Src: https://github.com/TheEconomist/big-mac-data/tree/master/output-data
 cd /tmp
 wget -O bmi.csv https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv
 
+# Copy file over to start
 cd /var/lib/docker/volumes/node-red/_data/oowdemo
 cp /tmp/bmi.csv .
-
 ```
 
-**Step1: ** Just read the file
+**Step1: ** Read the file
 
 - Node: Timestamp
 - Node: Read file: `/data/oowdemo/bmi.csv`
@@ -206,7 +244,7 @@ values(
 )
 ```
 
-- `truncate table big_mac_index;`
+- SQL: `truncate table big_mac_index;`
 
 ** Step 3: ** Solve 500 Solution
 
@@ -273,7 +311,7 @@ from json_table(:valueOfValuesArrayIndex0, '$[*]'
 ```
 
 
-- `truncate table big_mac_index;`
+- SQL: `truncate table big_mac_index;`
 
 
 ** Step 4: ** Drop file
@@ -296,7 +334,7 @@ cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo
 ```
 
 
-- `truncate table big_mac_index;`
+- SQL: `truncate table big_mac_index;`
 - Reconnect Oracle
 `cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo`
 
@@ -310,19 +348,23 @@ cp /tmp/bmi.csv /var/lib/docker/volumes/node-red/_data/oowdemo
   - GET: `https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-adjusted-index.csv`
   - Attach to CSV
 
-- `truncate table big_mac_index;`
+- SQL: `truncate table big_mac_index;`
 
 
 
 
+![](../../img/demo4.png)
 
-# Problem: Customize Functions
+[demo4.json](demo4.json)
+
+
+
+## Demo 5: Custom Functions
 
 Want to add a bit of programming to massage the data.
 
 Using same data as before want to only get date and lower currency code.
 
-## Solution
 
 - Node: Timer
 - Node: http request
@@ -344,27 +386,23 @@ return msg;
 ```
 
 
-**Step 2: ** 
+![](../../img/demo5.png)
 
-- Node: Timer (after Timestamp)
-  - `Resend every 10 s`
+[demo5.json](demo5.json)
 
-
-# Problem:
+## Demo 6: Monitor / read emails
 
 Want to read emails
 
+_Note: I'll be using a gmail account to demo this functionality. If you use Gmail you'll have to enable Gmail API for your account / make it less secure._
+
 
 ```sql
-
 truncate table email;
 
 select *
 from email;
-
 ```
-
-## Solution
 
 
 ** Step 1: ** 
@@ -372,7 +410,7 @@ from email;
 - Node: Email
   - Getmail Every: `5`
   - Userid: `03j.dsouza@gmail.com`
-  - pass: ENPASS
+  - pass: xyz
 - Node: Debug
   - All Message object
 
@@ -420,71 +458,21 @@ values (
 ```
 
 
+![](../../img/demo6.png)
 
-** Step 4: ** JSON Processing
-
-_Suppose the email was a JSON data and you wanted to process it_
-
-
-- Node: Oracle: Disconnect
-- Node: JSON
-  - `payload.msg`
-  - Connect to Debug (should be 2 debugs now)
-
-Demo: 
-
-```json
-{
-  "name" : "martin",
-  "email" : "mdsouza@insum.ca"
-}
-```
-  - Show the String vs JSON data
-
-Next:
-
-- Node: Template
-  
-```
-Hello {{payload.msg.name}}.
-
-You sent this from {{payload.msg.email}}
-```
-
-- Node Debug
-  - Only connect template
-  - Set to `msg.payload`
-
-
-Demo: Send same email
+[demo6.json](demo6.json)
 
 
 
-# Problem: import / export
+## Demo 7: Import / Export
 
-How do I "share" or save these individuall?
+This shows how to share Flows:
 
-## Solution:
-
-Simple JSON architecture
-
-- Menu > Export > Clipboard 
-  - Chose Formatted
-
-Should look like: demo-export.json
-
-
-** Step 2: ** Import:
 
 - Menu > Import > Clipboard (could be a file)
-- 
+- Menu > Export > Clipboard 
 
+All the demos above have links at the bottom for the exported JSON structure.
 
-
-# Problem: Other
-
-- Show how to add pallete
-- Show other Nodes
-
-
+![](../../img/demo7.png)
 

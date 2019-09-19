@@ -16,7 +16,17 @@ rm -rf *
 Delete all emails in 03j@gmailcom
 
 
-## Table
+## Demo Backup of flows:
+
+```bash
+sudo -i
+
+cd /var/lib/docker/volumes/node-red/_data/
+yes | cp -rf /var/lib/docker/volumes/node-red/_data/flows.json /var/lib/docker/volumes/node-red/_data/flows.bkp
+
+```
+
+## Database Setup
 
 ```sql
 create table big_mac_index (
