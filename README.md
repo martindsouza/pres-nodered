@@ -6,6 +6,8 @@ Slides: https://gitpitch.com/martindsouza/pres-nodered/master
 
 ## Gitpitch
 
+[Docs](https://gitpitch.com/docs/)
+
 http://localhost:9090/gitpitch/desktop/manager
 
 ```bash
